@@ -1,0 +1,11 @@
+App/node_modules/
+App/.expo/
+App/dist/
+App/**/build/
+App/**/.comments/
+
+Server/__pycache__/
+Server/venv/
+
+
+**/.DS_Store
