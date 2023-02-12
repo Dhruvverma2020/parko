@@ -9,7 +9,7 @@ os.chdir(__file__.replace(os.path.basename(__file__), ''))
 from utils.generate_otp import generate_otp
 from utils.generate_session_id import sess_id
 
-app = Flask(__name__, static_folder='../client/build')
+app = Flask(__name__)
 CORS(app)
 
 
