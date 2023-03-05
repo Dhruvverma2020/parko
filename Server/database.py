@@ -62,7 +62,7 @@ class Database:
                     )""")
 
         cur.execute("""CREATE TABLE vehicle(
-                        number VARCHAR(20) AUTO_INCREMENT PRIMARY KEY,
+                        vehicle_number VARCHAR(20) PRIMARY KEY,
                         model VARCHAR(50),
                         vehicle_type_id INT,
                         user_id INT
