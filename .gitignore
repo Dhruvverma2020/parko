@@ -3,6 +3,7 @@ App/.expo/
 App/dist/
 App/**/build/
 App/**/.comments/
+App/.env
 
 Server/__pycache__/
 Server/venv/
