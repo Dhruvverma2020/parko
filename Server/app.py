@@ -18,14 +18,12 @@ session = {}
 pending_otp = {}
 
 def authenticate(request):
-    loginID = request.cookies.get('loginID')
-    sessionID = request.cookies.get('sessionID')
+    loginID = request.json.get('loginID')
+    sessionID = request.json.get('sessionID')
     if not loginID or not sessionID:
         response = make_response("Not Logged in", 401)
     elif session.get(loginID) != sessionID:
         response = make_response("Not Logged in", 401)
-        response.delete_cookie('loginID')
-        response.delete_cookie('sessionID')
     # TODO
 
 
@@ -35,6 +33,7 @@ def otp():
     otp = generate_otp(phone)
 
     pending_otp[phone] = otp
+    return make_response("sent", 200)
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -47,14 +46,17 @@ def login():
         sID = sess_id()
         session[phone] = sID
 
-        response.status_code = 200
-        response.set_cookie('loginID', phone)
-        response.set_cookie('sessionID', sID)
-        response.headers['Access-Control-Allow-Origin'] = request.headers['origin']
-        response.headers['Access-Control-Allow-Credentials'] = True
-        response.headers['Access-Control-Expose-Headers'] = 'date, etag, access-control-allow-origin, access-control-allow-credentials'
+        del pending_otp[phone]
 
+        response.status_code = 200
+        response.data = json.dumps({
+            'loginID': phone,
+            'sessionID': sID
+        })
     else:
         response.status_code = 401
 
     return response
+
+if __name__ == '__main__':
+    app.run(use_reloader=True, host='0.0.0.0', port=5000, threaded=True)
