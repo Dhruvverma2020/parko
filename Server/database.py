@@ -127,6 +127,113 @@ class Database:
         conn.commit()
         cur.close()
 
+    def new_user(self, first_name, last_name, email, phone, username, password_hash):
+        conn = self.conn
+        cur = conn.cursor()
+        cur.execute("""INSERT INTO login(username, password_hash)
+                    VALUES(%s, %s)""",
+                    (username, password_hash))
+        conn.commit()
+        login_id = cur.lastrowid
+        cur.execute("""INSERT INTO user(first_name, last_name, email, phone, login_id)
+                    VALUES(%s, %s, %s, %s, %s)""",
+                    (first_name, last_name, email, phone, login_id))
+
+        conn.commit()
+        cur.close()
+
+    def new_vehicle_type(self, type_name):
+        conn = self.conn
+        cur = conn.cursor()
+        cur.execute("""INSERT INTO vehicle_type(type)
+                    VALUES(%s)""",
+                    (type_name,))
+        conn.commit()
+        cur.close()
+
+    def register_vehicle(self, number, model, type_name, user_id):
+        conn = self.conn
+        cur = conn.cursor()
+        cur.execute("""SELECT vehicle_type_id FROM vehicle_type
+                        WHERE type = %s""",
+                        (type_name,))
+        vehicle_type_id = cur.fetchone()[0]
+        cur.execute("""INSERT INTO vehicle(vehicle_number, model, Vehicle_type_id, user_id)
+                        VALUES(%s, %s, %s, %s)""",
+                        (number, model, vehicle_type_id, user_id))
+        conn.commit()
+        cur.close()
+
+    def new_space_owner(self, first_name, last_name, phone, username, password_hash):
+        conn = self.conn
+        cur = conn.cursor()
+        cur.execute("""INSERT INTO login(username, password_hash)
+                    VALUES(%s, %s)""",
+                    (username, password_hash))
+        conn.commit()
+        login_id = cur.lastrowid
+        cur.execute("""INSERT INTO parking_space_owner(first_name, last_name, phone, login_id)
+                    VALUES(%s, %s, %s, %s)""",
+                    (first_name, last_name, phone, login_id))
+
+        conn.commit()
+        cur.close()
+
+    def new_space(self, space_name, space_type, capacity, lat, lon, owner_phone, tel):
+        conn = self.conn
+        cur = conn.cursor()
+        cur.execute("""SELECT owner_id FROM parking_space_owner
+                        WHERE phone = %s""",
+                        (owner_phone,))
+        owner_id = cur.fetchone()[0]
+
+        cur.execute("""INSERT INTO parking_space(space_name, space_type, capacity,
+                    latitute, longitude, owner_id, telephone)
+                    VALUES(%s, %s, %s, %s, %s, %s, %s)""",
+                    (space_name, space_type, capacity, lat, lon, owner_id, tel))
+        conn.commit()
+        space_id = cur.lastrowid
+        cur.close()
+        return space_id
+
+    def get_space_owner_phone(self, space_id):
+        conn = self.conn
+        cur = conn.cursor()
+        cur.execute("""SELECT owner_id FROM parking_space
+                        WHERE space_id = %s""",
+                        (space_id,))
+        owner_id = cur.fetchone()[0]
+        cur.execute("""SELECT phone FROM parking_space_owner
+                        WHERE owner_id = %s""",
+                        (owner_id,))
+        phone = cur.fetchone()[0]
+        cur.close()
+        return phone
+
+    def new_spot(self, space_id, spot_num, price, block, vehicle_type):
+        conn = self.conn
+        cur = conn.cursor()
+        cur.execute("""SELECT vehicle_type_id FROM vehicle_type
+                        WHERE type = %s""",
+                        (vehicle_type,))
+        vehicle_type_id = cur.fetchone()[0]
+
+        cur.execute("""INSERT INTO parking_spot(spot_num, price,
+                        block, vehicle_type_id, space_id)
+                        VALUES(%s, %s, %s, %s, %s)""",
+                        (spot_num, price, block, vehicle_type_id, space_id))
+
+        conn.commit()
+        cur.close()
+
+
+    def get_pw_hash(self, phone):
+        conn = self.conn()
+        cur = conn.cursor()
+        cur.execute("""SELECT login_id FROM user
+                        WHERE phone = %s""",
+                        (phone,))
+        login_id = cur.fetchone()[0]
 
 
 if __name__ == '__main__':

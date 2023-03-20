@@ -7,6 +7,8 @@ async function otp(phone) {
 
     await axios.post(url, {
         phone: phone
+    }, {
+        timeout: 5000
     })
     .then((res) => {
         response = res.status;
@@ -25,12 +27,14 @@ async function validate(phone, otp) {
     await axios.post(url, {
         phone: phone,
         otp: otp
+    }, {
+        timeout: 5000
     })
     .then((res) => {
-        response = [res.status, res.data]
+        response = [res.status, res.data];
     })
     .catch((error) => {
-        console.log(error);
+        response = [error.response.status];
     })
 
     return response;
