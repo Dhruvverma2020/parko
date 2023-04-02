@@ -7,6 +7,7 @@ import SelectVehicleData from '../assets/data/SelectVehicleData';
 import colors from '../assets/colors/colors';
 import MapView, {Marker} from 'react-native-maps';
 import tw from 'tailwind-react-native-classnames';
+import ScreenContext from '../Contexts/ScreenContext';
 
 const mapStyle = [
   {
@@ -199,6 +200,12 @@ const mapStyle = [
 Feather.loadFont();
 
 export default function Home() {
+  const {setCurrentScreen} = React.useContext(ScreenContext);
+
+  function navigate() {
+    setCurrentScreen(2);
+  }
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -211,7 +218,7 @@ export default function Home() {
         >
           <Image source={require('../assets/images/Vector-1.png')} />
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity onPress={navigate}
         style={tw`bg-gray-100 absolute top-10 left-44 z-50 p-4 rounded-full shadow-lg`}
         >
           <Image source={require('../assets/images/Vector.png')} />
