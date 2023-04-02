@@ -19,14 +19,14 @@ export default function ParkingSpot() {
     return (
         <View style={styles.container}>
             <SafeAreaView>
-            <View style={styles.headerWrapper}>
+            <View style={styles.headerWrapper} className="mt-2">
                 <Feather name="arrow-left" size={30} color={colors.textDark} onPress={back} />
-                <Text style={tw``}>Select A Parking Spot</Text>
+                <Text style={tw`text-lg`}>Select A Parking Spot</Text>
                 <Feather name="arrow-left" size={24} color={colors.background} />
             </View>
             </SafeAreaView>
             <View>
-                <Text>C</Text>
+                <Text></Text>
             </View>
         </View>
     );
