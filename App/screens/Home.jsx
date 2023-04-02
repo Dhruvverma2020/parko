@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { StatusBar } from 'expo-status-bar';
 import { Text, TextInput, View, Animated,  StyleSheet, SafeAreaView, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import SignOut from "../components/SignOut";
 import Feather from 'react-native-vector-icons/Feather';
@@ -265,6 +266,8 @@ export default function Home() {
         marginLeft: 10,
       }}>Search for Parking Spots</Text>
       </TouchableOpacity>
+      
+      <StatusBar style="light" />
     </View>
   );
 };

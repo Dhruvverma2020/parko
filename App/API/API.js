@@ -40,6 +40,49 @@ async function validate(phone, otp) {
     return response;
 }
 
+async function authenticateLogin(loginID, sessionID) {
+    url = host + "/authenticate";
+    let response;
 
+    await axios.post(url, {
+        loginID,
+        sessionID
+    }, {
+        timeout: 5000
+    })
+    .then((res) => {
+        response = res.status;
+        return;
+    })
+    .catch((error) => {
+        response = error.response.status;
+    })
 
-export { otp, validate };
+    return response;
+}
+
+async function registerUser(fname, lname, email, loginID, sessionID) {
+    url = host + "/signup/user";
+    let response;
+
+    await axios.post(url, {
+        fname,
+        lname,
+        email,
+        loginID,
+        sessionID
+    }, {
+        timeout: 5000
+    })
+    .then((res) => {
+        response = res.status;
+        return;
+    })
+    .catch((error) => {
+        response = error.response.status;
+    })
+
+    return response;
+}
+
+export { otp, validate, authenticateLogin, registerUser };

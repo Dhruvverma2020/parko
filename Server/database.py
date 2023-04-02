@@ -228,12 +228,108 @@ class Database:
 
 
     def get_pw_hash(self, phone):
-        conn = self.conn()
+        conn = self.conn
         cur = conn.cursor()
         cur.execute("""SELECT login_id FROM user
                         WHERE phone = %s""",
                         (phone,))
         login_id = cur.fetchone()[0]
+        cur.execute("""SELECT password_hash FROM login
+                        WHERE login_id = %s""",
+                        (login_id,))
+        pw_hash = cur.fetchone()[0]
+        cur.close()
+        return pw_hash
+
+    def get_user_id(self, phone):
+        conn = self.conn
+        cur = conn.cursor()
+        cur.execute("""SELECT user_id FROM user
+                        WHERE phone = %s""",
+                        (phone,))
+        user_id = cur.fetchone()[0]
+        cur.close()
+        return user_id
+
+
+    def register_payment(self, transaction_id, amount, payment_type):
+        conn = self.conn
+        cur = conn.cursor()
+        cur.execute("""INSERT INTO payment(transaction_id,
+                        amount, payment_type, status)
+                        VALUES(%s, %s, %s, TRUE)""",
+                        (transaction_id, amount, payment_type))
+
+        conn.commit()
+        cur.close()
+
+    def reserve_spot(self, spot_id, user_id, start_time, end_time):
+        # format of time '1998-01-23 12:45:56'
+        conn = self.conn
+        cur = conn.cursor()
+        cur.execute("""INSERT INTO reservation(user_id, spot_id,
+                        penalty, reservation_time, start_time, end_time)
+                        VALUES(%s, %s, 0, NOW(), %s, %s)""",
+                        (user_id, spot_id, start_time, end_time))
+
+        conn.commit()
+        cur.close()
+
+    def get_all_spaces(self):
+        conn = self.conn
+        cur = conn.cursor()
+        cur.execute("""SELECT space_id, space_name, latitude, longitude
+                        FROM parking_space""")
+        results = cur.fetchall()
+        cur.close()
+        return results
+
+    def get_all_spots(self, space_id):
+        conn = self.conn
+        cur = conn.cursor()
+        cur.execute("""SELECT spot_id, spot_num, price, block, vehicle_type_id
+                        FROM parking_spot
+                        WHERE space_id = %s""",
+                        (space_id,))
+        results = cur.fetchall()
+        cur.close()
+        return results
+
+    def get_vehicle_types(self):
+        conn = self.conn
+        cur = conn.cursor()
+        cur.execute("""SELECT vehicle_type_id, type
+                        FROM vehicle_type""")
+        results = cur.fetchall()
+        cur.close()
+
+        dict = {}
+        for result in results:
+            dict[result[0]] = result[1]
+
+        return dict
+
+    def get_vehicles(self, user_id):
+        conn = self.conn
+        cur = conn.cursor()
+        cur.execute("""SELECT vehicle_number, model, vehicle_type_id
+                        FROM vehicle
+                        WHERE user_id = %s""",
+                        (user_id,))
+        results = cur.fetchall()
+        cur.close()
+        return results
+
+    def user_exists(self, phone):
+        conn = self.conn
+        cur = conn.cursor()
+        cur.execute("""SELECT * from user
+                        WHERE phone = %s""",
+                        (phone,))
+        if cur.fetchone():
+            return True
+        return False
+
 
 
 if __name__ == '__main__':

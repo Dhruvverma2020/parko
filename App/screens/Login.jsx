@@ -47,7 +47,13 @@ export default function Login() {
                     "loginID": data.loginID,
                     "sessionID": data.sessionID
                 })
-                setCurrentScreen(1);
+
+                if (data.exists) {
+                    setCurrentScreen(1);
+                }
+                else {
+                    setCurrentScreen(3);
+                }
             }
             else {
                 Toast.show("Wrong OTP!", Toast.SHORT);
