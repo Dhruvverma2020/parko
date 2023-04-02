@@ -188,7 +188,7 @@ class Database:
         owner_id = cur.fetchone()[0]
 
         cur.execute("""INSERT INTO parking_space(space_name, space_type, capacity,
-                    latitute, longitude, owner_id, telephone)
+                    latitude, longitude, owner_id, telephone)
                     VALUES(%s, %s, %s, %s, %s, %s, %s)""",
                     (space_name, space_type, capacity, lat, lon, owner_id, tel))
         conn.commit()
@@ -278,7 +278,7 @@ class Database:
     def get_all_spaces(self):
         conn = self.conn
         cur = conn.cursor()
-        cur.execute("""SELECT space_id, space_name, latitude, longitude
+        cur.execute("""SELECT space_id, space_name, latitude, longitude, space_type
                         FROM parking_space""")
         results = cur.fetchall()
         cur.close()

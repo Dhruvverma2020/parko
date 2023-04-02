@@ -85,4 +85,21 @@ async function registerUser(fname, lname, email, loginID, sessionID) {
     return response;
 }
 
-export { otp, validate, authenticateLogin, registerUser };
+async function getSpaces() {
+    url = host + "/spaces";
+    let response;
+
+    await axios.get(url)
+    .then((res) => res.data)
+    .then((res) => {
+        response = res;
+        return;
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+
+    return response;
+}
+
+export { otp, validate, authenticateLogin, registerUser, getSpaces };

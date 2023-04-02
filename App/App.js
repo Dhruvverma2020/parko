@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import LoginContext from './Contexts/LoginContext';
 import ScreenContext from './Contexts/ScreenContext';
+import SelectedContext from './Contexts/SelectedContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
 import ScreenRenderer from './screens/ScreenRenderer';
@@ -12,7 +13,8 @@ export default function App() {
         sessionID: ""
     });
 
-    const [currentScreen, setCurrentScreen] = useState(-1)
+    const [currentScreen, setCurrentScreen] = useState(-1);
+    const [selected, setSelected] = useState(0);
 
     useEffect(() => {
         async function IIFE() {
@@ -46,7 +48,9 @@ export default function App() {
     return (
         <LoginContext.Provider value={{loginDetails, setLoginDetails}}>
             <ScreenContext.Provider value={{currentScreen, setCurrentScreen}}>
-                <ScreenRenderer />
+                <SelectedContext.Provider value={{selected, setSelected}}>
+                    <ScreenRenderer />
+                </SelectedContext.Provider>
             </ScreenContext.Provider>
         </LoginContext.Provider>
     );

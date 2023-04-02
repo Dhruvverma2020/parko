@@ -195,7 +195,8 @@ def get_spaces():
             "id": space[0],
             "name": space[1],
             "lat": space[2],
-            "lon": space[3]
+            "lon": space[3],
+            "type": space[4]
         }
         spaces_dict['spaces'].append(space_dict)
 
