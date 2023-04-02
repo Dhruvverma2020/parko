@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Text, TextInput, View, Animated, StyleSheet, SafeAreaView, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import SignOut from "../components/SignOut";
@@ -200,15 +201,27 @@ const mapStyle = [
 
 Feather.loadFont();
 
+const initialRegion = {
+    latitude: 26.0810475,
+    longitude: 91.5621639,
+    latitudeDelta: 0.008,
+    longitudeDelta: 0.008,
+}
+
 export default function Home() {
     const { setCurrentScreen } = React.useContext(ScreenContext);
+    const map = useRef();
 
     function navigate() {
         setCurrentScreen(2);
     }
 
+    function center() {
+        map.current.animateToRegion(initialRegion)
+    }
+
     return (
-        <View style={styles.container}>
+        <View style={styles.container} className="bg-[#212121]">
             <TouchableOpacity
                 style={tw`bg-gray-100 absolute top-10 left-5 z-50 p-4 rounded-full shadow-lg`}
             >
@@ -228,44 +241,65 @@ export default function Home() {
 
 
 
-            <View style={tw`h-5/6`}>
+            <View style={tw`h-3/4`} className="relative">
                 <MapView
+                    ref={map}
                     style={tw`flex-1`}
                     customMapStyle={mapStyle}
-                    mapType='mutedStandard'
-                    initialRegion={{
-                        latitude: 26.0801024,
-                        longitude: 91.5588184,
-                        latitudeDelta: 0.004,
-                        longitudeDelta: 0.004,
-                    }}
+                    mapType='standard'
+                    initialRegion={initialRegion}
                 >
                     <Marker
                         coordinate={{
-                            latitude: 26.0801024,
-                            longitude: 91.5588184,
+                            latitude: 26.0810475,
+                            longitude: 91.5621639,
                         }}
                         image={require('../assets/images/Vector_2.png')}
                         title="Location"
-                        description='Where to'
+                        description='Current'
                     />
+                    <Marker
+                        className="w-20 h-20"
+                        coordinate={{
+                            // 26.08215504236644, 91.56582959636721
+                            latitude: 26.0821550,
+                            longitude: 91.5658296,
+                        }}
+                        // image={require('../assets/path.png')}
+                        title="IT Park"
+                        description='Parking Space'
+                    >
+                        <Image
+                            source={require('../assets/path.png')}
+                            className="w-20 h-20"
+                            resizeMode="contain"
+                        />
+                    </Marker>
                 </MapView>
+                <TouchableOpacity
+                    onPress={center}
+                    style={tw`bg-gray-100 bg-opacity-70 absolute bottom-4 right-4 z-50 p-3 rounded-full shadow-lg`}
+                >
+                    <Image className="h-4 w-4" source={require('../assets/images/location.png')} />
+                </TouchableOpacity>
             </View>
-            <TouchableOpacity style={{
-                backgroundColor: '#FFFFFF',
-                height: 140,
-                // borderTopLeftRadius: 30,
-                // borderTopRightRadius: 25,
-                flexDirection: 'row',
-                paddingHorizontal: 20,
-                // marginTop: 20,
-            }}>
-                <Feather name="search" size={30} color={colors.textDark} />
-                <Text style={{
-                    flex: 1,
-                    marginLeft: 10,
-                }}>Search for Parking Spots</Text>
-            </TouchableOpacity>
+
+            <View className="bg-white h-full rounded-t-[40px] pt-3 px-5">
+                <TouchableOpacity style={{
+                    // height: 140,
+                    // borderTopLeftRadius: 30,
+                    // borderTopRightRadius: 25,
+                    flexDirection: 'row',
+                    // paddingHorizontal: 20,
+                    // marginTop: 15,
+                }}>
+                    <Feather name="search" size={30} color={colors.textDark} />
+                    <Text style={{
+                        flex: 1,
+                        marginLeft: 10,
+                    }}>Search for Parking Spots</Text>
+                </TouchableOpacity>
+            </View>
 
             <StatusBar style="light" />
         </View>
