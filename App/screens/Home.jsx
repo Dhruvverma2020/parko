@@ -30,6 +30,10 @@ export default function Home() {
         setCurrentScreen(2);
     }
 
+    function notifications() {
+        setCurrentScreen(4);
+    }
+
     function center() {
         map.current.animateToRegion(initialRegion);
     }
@@ -42,17 +46,11 @@ export default function Home() {
                 <Image source={require('../assets/images/Vector-2.png')} />
             </TouchableOpacity>
             <TouchableOpacity
+                onPress={notifications}
                 style={tw`bg-gray-100 absolute top-12 left-24 z-50 p-4  rounded-full shadow-lg`}
             >
                 <Image source={require('../assets/images/Vector-1.png')} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={navigate}
-                style={tw`bg-gray-100 absolute top-12 left-44 z-50 p-4 rounded-full shadow-lg`}
-            >
-                <Image source={require('../assets/images/Vector.png')} />
-            </TouchableOpacity>
-
-
 
 
             <View style={tw`h-3/4`} className="relative">
@@ -96,6 +94,14 @@ export default function Home() {
                 >
                     <Image className="h-4 w-4" source={require('../assets/images/location.png')} />
                 </TouchableOpacity>
+
+                {selected ? (
+                <TouchableOpacity onPress={navigate}
+                    style={tw`bg-gray-100 absolute bottom-4 left-44 z-50 p-4 rounded-full shadow-lg`}
+                >
+                    <Image source={require('../assets/images/Vector.png')} />
+                </TouchableOpacity>
+            ) : null}
             </View>
 
             <Nearby />

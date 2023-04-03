@@ -75,7 +75,9 @@ async function registerUser(fname, lname, email, loginID, sessionID) {
         timeout: 5000
     })
     .then((res) => {
-        response = res.status;
+        if (res) {
+            response = res.status;
+        }
         return;
     })
     .catch((error) => {

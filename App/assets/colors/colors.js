@@ -7,5 +7,7 @@ const colors = {
     secondary: '#FFFFFF',
     tertiary: '#797FAE',
     next: '#5E6EFC',
+    flatlist: "#F3F6FF",
+    flatlist1: "#567DF4"
 };
 export default colors;
