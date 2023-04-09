@@ -2,7 +2,7 @@ import axios from "axios";
 import {SERVER_HOST as host} from "@env";
 
 async function otp(phone) {
-    url = host + "/otp";
+    const url = host + "/otp";
     let response;
 
     await axios.post(url, {
@@ -11,17 +11,19 @@ async function otp(phone) {
         timeout: 5000
     })
     .then((res) => {
-        response = res.status;
+        if (res) {
+            response = res.status;
+        }
     })
     .catch((error) => {
-        console.log(error);
+        // console.log(error);
     })
 
     return response;
 }
 
 async function validate(phone, otp) {
-    url = host + "/login";
+    const url = host + "/login";
     let response;
 
     await axios.post(url, {
@@ -41,7 +43,7 @@ async function validate(phone, otp) {
 }
 
 async function authenticateLogin(loginID, sessionID) {
-    url = host + "/authenticate";
+    const url = host + "/authenticate";
     let response;
 
     await axios.post(url, {
@@ -62,7 +64,7 @@ async function authenticateLogin(loginID, sessionID) {
 }
 
 async function registerUser(fname, lname, email, loginID, sessionID) {
-    url = host + "/signup/user";
+    const url = host + "/signup/user";
     let response;
 
     await axios.post(url, {
@@ -88,7 +90,7 @@ async function registerUser(fname, lname, email, loginID, sessionID) {
 }
 
 async function getSpaces() {
-    url = host + "/spaces";
+    const url = host + "/spaces";
     let response;
 
     await axios.get(url)
@@ -104,4 +106,50 @@ async function getSpaces() {
     return response;
 }
 
-export { otp, validate, authenticateLogin, registerUser, getSpaces };
+async function getSpots(space_id) {
+    const url = host + "/space/" + space_id;
+
+    let response;
+    await axios.get(url)
+    .then((res) => res.data)
+    .then((res) => {
+        response = res;
+        return;
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+
+    return response;
+}
+
+async function reserve(space_id, spot, time, amount, loginID, sessionID) {
+    const url = host + '/reserve';
+
+    let response;
+    await axios.post(url, {
+        loginID,
+        sessionID,
+        spot,
+        time,
+        space_id,
+        amount,
+        transaction_id: "TX00112" + spot,
+        payment_type: "UPI",
+    }, {
+        timeout: 5000
+    })
+    .then((res) => {
+        if (res) {
+            response = res.status;
+        }
+        return;
+    })
+    .catch((error) => {
+        response = error.response.status;
+    })
+
+    return response;
+}
+
+export { otp, validate, authenticateLogin, registerUser, getSpaces, getSpots, reserve };
