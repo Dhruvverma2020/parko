@@ -10,6 +10,9 @@ import SelectedSpotContext from '../Contexts/SelectedSpotContext';
 import NotificationsContext from '../Contexts/NotificationsContext';
 import { reserve } from "../API/API";
 import Confirmation from "./Confirmation";
+import SelectVehicleData from '../assets/data/SelectVehicleData';
+import VehicleContext from "../Contexts/VehicleContext";
+import RecentsContext from "../Contexts/RecentsContext";
 
 
 Feather.loadFont();
@@ -23,6 +26,9 @@ export default function OrderDetail() {
     const { loginDetails } = React.useContext(LoginContext);
     const notifications = React.useContext(NotificationsContext);
 
+    const recents = React.useContext(RecentsContext);
+    const { currentVehicle } = React.useContext(VehicleContext);
+
     const [modal, setModal] = React.useState(false);
 
     function back() {
@@ -33,12 +39,13 @@ export default function OrderDetail() {
         reserve(
             selected[0],
             selectedSpot.spot,
-            selectedSpot.from + selectedSpot.duration,
+            selectedSpot.from + sliderValue,
             sliderValue * 50,
             loginDetails.loginID,
             loginDetails.sessionID
         )
-        notifications.unshift(["Successful Transaction", "1 parking slot booked", "Now"])
+        notifications.unshift(["Successful Transaction", "1 parking slot booked", "Now"]);
+        recents.unshift([selected[1], selectedSpot.spot, sliderValue, SelectVehicleData[currentVehicle-1].model]);
         setModal(true);
     }
 
@@ -70,7 +77,7 @@ export default function OrderDetail() {
             </View>
             <View style={styles.Vehicle}>
                 <Text style={styles.Title}>VEHICLE</Text>
-                <Text style={styles.subtitle}>2021 Audi Q3   |   UP 72 8055</Text>
+                <Text style={styles.subtitle}> {SelectVehicleData[currentVehicle-1].model}   |   {SelectVehicleData[currentVehicle-1].num}</Text>
                 <Text style={styles.Title}>PARKING LOT</Text>
                 <Text style={styles.subtitle}> {selected[1]}   |   Slot {selectedSpot.spot}</Text>
                 <View style={styles.total}>

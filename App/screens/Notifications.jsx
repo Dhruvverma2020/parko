@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, SafeAreaView, FlatList } from 'react-native';
+import { Text, View, StyleSheet, SafeAreaView } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import colors from '../assets/colors/colors';
-import notificationsData from '../assets/data/notificationsData';
 import ScreenContext from '../Contexts/ScreenContext';
 import NotificationsContext from '../Contexts/NotificationsContext';
 

@@ -7,6 +7,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
 import ScreenRenderer from './screens/ScreenRenderer';
 import NotificationsContext, { notifications } from './Contexts/NotificationsContext';
+import VehicleContext from './Contexts/VehicleContext';
+import RecentsContext, { recents } from './Contexts/RecentsContext';
 import { authenticateLogin } from './API/API';
 
 export default function App() {
@@ -22,6 +24,7 @@ export default function App() {
         from: 0,
         duration: 0
     })
+    const [currentVehicle, setCurrentVehicle] = useState(1);
 
     useEffect(() => {
         async function IIFE() {
@@ -58,7 +61,11 @@ export default function App() {
                 <SelectedContext.Provider value={{selected, setSelected}}>
                     <SelectedSpotContext.Provider value={{selectedSpot, setSelectedSpot}}>
                         <NotificationsContext.Provider value={notifications}>
-                            <ScreenRenderer />
+                            <VehicleContext.Provider value={{currentVehicle, setCurrentVehicle}}>
+                                <RecentsContext.Provider value={recents}>
+                                    <ScreenRenderer /> 
+                                </RecentsContext.Provider>
+                            </VehicleContext.Provider>
                         </NotificationsContext.Provider>
                     </SelectedSpotContext.Provider>
                 </SelectedContext.Provider>

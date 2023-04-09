@@ -1,19 +1,14 @@
 const SelectVehicleData = [
     {
         id: 1,
-        image: require('../images/Vector-2.png'),
-        title: 'Menu',
+        model: '2021 Audi Q3',
+        num: 'AS15 4837',
     },
     {
         id: 2,
-        image: require('../images/Vector-1.png'),
-        title: 'Notifications',
-    },
-    {
-        id: 3,
-        image: require('../images/Vector.png'),
-        title: 'Vehicle',
-    },
+        model: '2021 BMW X2',
+        num: 'MP21 3827',
+    }
 ];
 
 export default SelectVehicleData;
