@@ -60,6 +60,7 @@ export default function Home() {
                     customMapStyle={mapStyle}
                     mapType='standard'
                     initialRegion={initialRegion}
+                    provider="google"
                 >
                     <Marker
                         coordinate={{

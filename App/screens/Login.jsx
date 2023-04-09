@@ -2,8 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useRef, useContext } from 'react';
-import { Text, TextInput, View, Image } from 'react-native';
-import Toast from 'react-native-simple-toast';
+import { Text, TextInput, View, Image, ToastAndroid as Toast, Platform } from 'react-native';
+// import Toast from 'react-native-simple-toast';
 import Button from '../components/Button';
 import logo from "../assets/path_white.png";
 import { otp, validate } from '../API/API';
@@ -74,14 +74,16 @@ export default function Login() {
 
                 <TextInput value={phone} onChangeText={(text) => {setPhone(text)}}
                 className="bg-white rounded-lg py-2 px-2 flex-1 font-bold text-gray-700 tracking-widest"
-                placeholder='Phone Number' keyboardType='phone-pad' />
+                placeholder='Phone Number'
+                keyboardType={Platform.OS === 'android' ? 'phone-pad' : 'default'} />
             </View>
 
             {sent && (
                 <View className="w-[60%] mb-8 flex-row items-center bg-white rounded-lg">
                     <TextInput value={enteredOTP} onChangeText={(text) => {setEnteredOTP(text)}}
                     className="bg-white rounded-lg py-2 px-2 flex-1 font-bold text-gray-700 text-center tracking-widest"
-                    placeholder='OTP' keyboardType='numeric' maxLength={4} />
+                    placeholder='OTP' maxLength={4}
+                    keyboardType={Platform.OS === 'android' ? 'numeric' : 'default'}/>
                 </View>
             )}
 

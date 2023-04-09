@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState, useContext } from 'react';
-import { Text, TextInput, View, Image } from 'react-native';
-import Toast from 'react-native-simple-toast';
+import { Text, TextInput, View, Image, ToastAndroid as Toast } from 'react-native';
+// import Toast from 'react-native-simple-toast';
 import Button from '../components/Button';
 import logo from "../assets/path_white.png";
 import { registerUser } from '../API/API';
