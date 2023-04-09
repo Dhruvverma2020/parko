@@ -11,6 +11,8 @@ from utils.generate_otp import generate_otp
 from utils.generate_session_id import sess_id
 from utils.hash import hash
 
+from data.spots import spots
+
 app = Flask(__name__)
 CORS(app)
 
@@ -175,13 +177,19 @@ def reserve():
 
         db.register_payment(transaction_id, amount, payment_type)
         
-        spot_id = request.json['spot_id']
-        start_time = request.json['start']
-        end_time = request.json['end']
+        # spot_id = request.json['spot_id']
+        # start_time = request.json['start']
+        # end_time = request.json['end']
 
         # Parse start and end times in format '1998-01-23 12:45:56'
 
-        db.reserve_spot(spot_id, user_id, start_time, end_time)
+        # db.reserve_spot(spot_id, user_id, start_time, end_time)
+
+        space_id = request.json.get('space_id')
+        spot = request.json.get('spot')
+        t = request.json.get('time')
+        if space_id and t and spot:
+            spots[space_id][spot] = t
 
     return response
 
@@ -208,19 +216,25 @@ def get_spaces():
 
 @app.route('/space/<int:id>', methods=['GET'])
 def get_spots(id):
-    spots = db.get_all_spots(id)
-    types = db.get_vehicle_types()
+    # spots = db.get_all_spots(id)
+    # types = db.get_vehicle_types()
 
     spots_dict = {"spots": []}
-    for spot in spots:
-        spot_dict = {
-            "spot_id": spot[0],
-            "spot_num": spot[1],
-            "price": spot[2],
-            "block": spot[3],
-            "vehicle_type": types.get(spot[4])
-        }
-        spots_dict['spots'].append(spot_dict)
+    # for spot in spots:
+    #     spot_dict = {
+    #         "spot_id": spot[0],
+    #         "spot_num": spot[1],
+    #         "price": spot[2],
+    #         "block": spot[3],
+    #         "vehicle_type": types.get(spot[4])
+    #     }
+    #     spots_dict['spots'].append(spot_dict)
+
+    for spot in spots[id].keys():
+        spots_dict['spots'].append({
+            "spot": spot,
+            "availablein": spots[id][spot]
+        })
 
     response = make_response()
     response.status_code = 200
