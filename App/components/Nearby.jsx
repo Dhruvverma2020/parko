@@ -4,8 +4,9 @@ import { getSpaces } from '../API/API';
 import SelectedContext from '../Contexts/SelectedContext';
 
 // Directions in Map: https://instamobile.io/react-native-tutorials/react-native-draw-directions-map/
+const dist = ["0.6", "31.7"]
 
-export default function Nearby() {
+export default function Nearby({ setCoordinates }) {
     const [spaces, setSpaces] = useState([]);
     const { selected, setSelected } = useContext(SelectedContext);
 
@@ -38,11 +39,15 @@ export default function Nearby() {
             <ScrollView className="py-2">
                 {spaces.map((space) => (
                     <TouchableOpacity
-                        className={`flex-row p-3 rounded-2xl my-4 ${selected == space.id ? "bg-blue-100" : ""}`}
+                        className={`flex-row p-3 rounded-2xl my-4 ${selected[0] == space.id ? "bg-blue-100" : ""}`}
                         key={space.id}
                         onPress={() => {
                             if (selected != space.id) {
-                                setSelected(space.id);
+                                setSelected([space.id, space.name]);
+                                setCoordinates({
+                                    latitude: space.lat,
+                                    longitude: space.lon
+                                })
                             } else { setSelected(0); }
                         }}>
                         <Image source={require("../assets/images/location-pin.png")}
@@ -50,7 +55,7 @@ export default function Nearby() {
                         <View className="mx-4 flex-1 -mt-1">
                             <Text className="font-bold text-md opacity-70"> {space.name} </Text>
                             <Text className="opacity-40"> {space.type} </Text>
-                            <Text className="opacity-90"> 0.6 KM </Text>
+                            <Text className="opacity-90"> {dist[space.id-1]} KM </Text>
                         </View>
                     </TouchableOpacity>
                 ))}

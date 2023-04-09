@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, Image, TouchableOpacity } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
@@ -9,6 +9,8 @@ import ScreenContext from '../Contexts/ScreenContext';
 import SelectedContext from '../Contexts/SelectedContext';
 import Nearby from '../components/Nearby';
 import mapStyle from '../assets/mapStyle';
+import MapViewDirections from 'react-native-maps-directions';
+import { GOOGLE_API_KEY } from "@env";
 
 
 
@@ -25,6 +27,10 @@ export default function Home() {
     const { setCurrentScreen } = React.useContext(ScreenContext);
     const map = useRef();
     const { selected } = React.useContext(SelectedContext);
+    const [ coordinates, setCoordinates ] = useState({
+        latitude: null,
+        longitude: null
+    })
 
     function navigate() {
         setCurrentScreen(2);
@@ -78,7 +84,6 @@ export default function Home() {
                             latitude: 26.0821550,
                             longitude: 91.5658296,
                         }}
-                        // image={require('../assets/path.png')}
                         title="IT Park"
                         description='Parking Space'
                     >
@@ -88,6 +93,38 @@ export default function Home() {
                             resizeMode="contain"
                         />
                     </Marker>
+
+                    <Marker
+                        className="w-20 h-20"
+                        coordinate={{
+                            // 26.155366420028553, 91.78142650299374
+                            latitude: 26.1553664,
+                            longitude: 91.7814265
+                            // dist: 31.7 km
+                        }}
+                        title="IT Park"
+                        description='Parking Space'
+                    >
+                        <Image
+                            source={require('../assets/path.png')}
+                            className="w-20 h-20"
+                            resizeMode="contain"
+                        />
+                    </Marker>
+                    {/* {
+                        selected[0] ? (
+                            <MapViewDirections
+                                origin={{
+                                    latitude: 26.0810475,
+                                    longitude: 91.5621639,
+                                }}
+                                destination={coordinates}
+                                apikey={GOOGLE_API_KEY}
+                                strokeWidth={4}
+                                strokeColor="#385de0"
+                                />
+                        ) : null
+                    } */}
                 </MapView>
                 <TouchableOpacity
                     onPress={center}
@@ -96,7 +133,7 @@ export default function Home() {
                     <Image className="h-4 w-4" source={require('../assets/images/location.png')} />
                 </TouchableOpacity>
 
-                {selected ? (
+                {selected[0] ? (
                 <TouchableOpacity onPress={navigate}
                     style={tw`bg-gray-100 absolute bottom-4 left-44 z-50 p-4 rounded-full shadow-lg`}
                 >
@@ -105,7 +142,7 @@ export default function Home() {
             ) : null}
             </View>
 
-            <Nearby />
+            <Nearby setCoordinates={setCoordinates} />
 
             <StatusBar style="light" />
         </View>
